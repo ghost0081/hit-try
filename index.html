@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Authorized Person Survey Form</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .form-section {
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 8px 15px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none;
+        }
+        .image-preview {
+            max-width: 100px;
+            max-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <body>
+        <div class="container">
+            <h1>CheckList- Authorized Person</h1>
+            <form action="/submit" method="post" enctype="multipart/form-data">
+                <!-- Form Inputs -->
+                <div class="form-section">
+                    <label for="apMainCode">AP Main Code:</label>
+                    <input type="text" id="apMainCode" name="apMainCode" required>
+                </div>
+                <div class="form-section">
+                    <label for="apName">AP Name:</label>
+                    <input type="text" id="apName" name="apName" required>
+                </div>
+                <div class="form-section">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div class="form-section">
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" name="location" required>
+                </div>
+                <div class="form-section">
+                    <label for="visitSpoc">Visit SPOC:</label>
+                    <input type="text" id="visitSpoc" name="visitSpoc" required>
+                </div>
+                <div class="form-section">
+                    <label for="modeOfAudit">Mode Of Audit:</label>
+                    <input type="text" id="modeOfAudit" name="modeOfAudit" required>
+                </div>
+                <div class="form-section">
+                    <label for="noOfEmployees">No Of Employees:</label>
+                    <input type="number" id="noOfEmployees" name="noOfEmployees" required>
+                </div>
+                <div class="form-section">
+                    <label for="noOfClientMappedToAp">No Of Client Mapped to AP:</label>
+                    <input type="number" id="noOfClientMappedToAp" name="noOfClientMappedToAp" required>
+                </div>
+    
+                <!-- User Table Section -->
+                <div class="form-section">
+                    <h2>Whether Terminal are located at eclared places, if no then address and date of change:</h2>
+                    <table id="valueTable">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>User Name</th>
+                                <th>Segment</th>
+                                <th>Approved Address</th>
+                                <th>Actual Located At</th>
+                                <th>Remarks</th>
+                                <th>Authorized Person Reply</th>
+                                <th>Evidence</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" name="userId[]" required></td>
+                                <td><input type="text" name="userName[]" required></td>
+                                <td><input type="text" name="segment[]" required></td>
+                                <td><input type="text" name="approvedAddress[]" required></td>
+                                <td><input type="text" name="actualLocatedAt[]" required></td>
+                                <td><input type="text" name="remarks[]" required></td>
+                                <td><input type="text" name="authorizedPersonReply[]" required></td>
+                                <td><input type="file" name="evidence[]" accept="image/*"></td>
+                                <td><button type="button" class="remove-row-btn">Remove</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" id="addRowBtn">Add Row</button>
+                </div>
+    
+                <!-- List Of Boards Table Section -->
+                <div class="form-section">
+                    <h2>Boards to displayed at premsises:(check Authroized Person / Branch address / Branch Manager's name whever required)</h2>
+                    <table id="boardTable">
+                        <thead>
+                            <tr>
+                                <th>Sr No.</th>
+                                <th>List Of Boards</th>
+                                <th>Yes/No</th>
+                                <th>Remarks</th>
+                                <th>Authorized Person Reply</th>
+                                <th>Evidence</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Main display board with words franchisee</td>
+                                <td><input type="text" name="yesNo[]"></td>
+                                <td><input type="text" name="boardRemarks[]"></td>
+                                <td><input type="text" name="boardAuthorizedPersonReply[]"></td>
+                                <td><input type="file" name="boardEvidence[]" accept="image/*"></td>
+                                <td><button type="button" class="remove-board-row-btn">Remove</button></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Notice board of the trading Member containing all details / information prescribed from time to time, are displayed at the AP location</td>
+                                <td><input type="text" name="yesNo[]"></td>
+                                <td><input type="text" name="boardRemarks[]"></td>
+                                <td><input type="text" name="boardAuthorizedPersonReply[]"></td>
+                                <td><input type="file" name="boardEvidence[]" accept="image/*"></td>
+                                <td><button type="button" class="remove-board-row-btn">Remove</button></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>SEBI registration certificate of the trading Member and registration letter issued by the Exchange is displayed at location</td>
+                                <td><input type="text" name="yesNo[]"></td>
+                                <td><input type="text" name="boardRemarks[]"></td>
+                                <td><input type="text" name="boardAuthorizedPersonReply[]"></td>
+                                <td><input type="file" name="boardEvidence[]" accept="image/*"></td>
+                                <td><button type="button" class="remove-board-row-btn">Remove</button></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Message of investor alert</td>
+                                <td><input type="text" name="yesNo[]"></td>
+                                <td><input type="text" name="boardRemarks[]"></td>
+                                <td><input type="text" name="boardAuthorizedPersonReply[]"></td>
+                                <td><input type="file" name="boardEvidence[]" accept="image/*"></td>
+                                <td><button type="button" class="remove-board-row-btn">Remove</button></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>AP registration certificate - BSE / NSE / MCX / NCDEX</td>
+                                <td><input type="text" name="yesNo[]"></td>
+                                <td><input type="text" name="boardRemarks[]"></td>
+                                <td><input type="text" name="boardAuthorizedPersonReply[]"></td>
+                                <td><input type="file" name="boardEvidence[]" accept="image/*"></td>
+                                <td><button type="button" class="remove-board-row-btn">Remove</button></td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>Message for investor (Do's & Don'ts)</td>
+                                <td><input type="text" name="yesNo[]"></td>
+                                <td><input type="text" name="boardRemarks[]"></td>
+                                <td><input type="text" name="boardAuthorizedPersonReply[]"></td>
+                                <td><input type="file" name="boardEvidence[]" accept="image/*"></td>
+                                <td><button type="button" class="remove-board-row-btn">Remove</button></td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>Message for investor Rights & Responsibilities</td>
+                                <td><input type="text" name="yesNo[]"></td>
+                                <td><input type="text" name="boardRemarks[]"></td>
+                                <td><input type="text" name="boardAuthorizedPersonReply[]"></td>
+                                <td><input type="file" name="boardEvidence[]" accept="image/*"></td>
+                                <td><button type="button" class="remove-board-row-btn">Remove</button></td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>Investor Charter</td>
+                                <td><input type="text" name="yesNo[]"></td>
+                                <td><input type="text" name="boardRemarks[]"></td>
+                                <td><input type="text" name="boardAuthorizedPersonReply[]"></td>
+                                <td><input type="file" name="boardEvidence[]" accept="image/*"></td>
+                                <td><button type="button" class="remove-board-row-btn">Remove</button></td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>Grievance Redressal Mechanism (SEBI circular CIR/MIRSD/3/2014)</td>
+                                <td><input type="text" name="yesNo[]"></td>
+                                <td><input type="text" name="boardRemarks[]"></td>
+                                <td><input type="text" name="boardAuthorizedPersonReply[]"></td>
+                                <td><input type="file" name="boardEvidence[]" accept="image/*"></td>
+                                <td><button type="button" class="remove-board-row-btn">Remove</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" id="addBoardRowBtn">Add Row</button>
+                </div>
+    
+                <!-- Additional User Attributes Table Section -->
+                <div class="form-section">
+                    <h2>Whether terminal operated by approved user and certified user? if no then provide details:</h2>
+                    <table id="additionalTable">
+                        <thead>
+                            <tr>
+                                <th>Login ID</th>
+                                <th>Approved User Name</th>
+                                <th>Segment</th>
+                                <th>Operated By</th>
+                                <th>NCFM Qualified (Y/N)</th>
+                                <th>Approved User Available (Y/N)</th>
+                                <th>Authorized Person Reply</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" name="loginId[]" required></td>
+                                <td><input type="text" name="approvedUserName[]" required></td>
+                                <td><input type="text" name="additionalSegment[]" required></td>
+                                <td><input type="text" name="operatedBy[]" required></td>
+                                <td><select name="ncfmQualified[]"><option value="Y">Y</option><option value="N">N</option></select></td>
+                                <td><select name="approvedUserAvailable[]"><option value="Y">Y</option><option value="N">N</option></select></td>
+                                <td><input type="text" name="additionalAuthorizedPersonReply[]" required></td>
+                                <td><button type="button" class="remove-additional-row-btn">Remove</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" id="addAdditionalRowBtn">Add Row</button>
+                </div>
+    
+                <!-- New Table for Client Information -->
+                <div class="form-section">
+                    <h2>Whether order are placed by Authrozed Person / other person on behalf of client / standing instruction given by th eclient to trade on thier behalf(See authrority letter if any)?</h2>
+                    <table id="clientTable">
+                        <thead>
+                            <tr>
+                                <th>Client Code</th>
+                                <th>Client Name</th>
+                                <th>Name of Person Trading on Behalf of Client</th>
+                                <th>Relation</th>
+                                <th>AL (Y/N)</th>
+                                <th>Authorized Person's Reply</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" name="clientCode[]" required></td>
+                                <td><input type="text" name="clientName[]" required></td>
+                                <td><input type="text" name="personTrading[]" required></td>
+                                <td><input type="text" name="relation[]" required></td>
+                                <td><select name="al[]"><option value="Y">Y</option><option value="N">N</option></select></td>
+                                <td><input type="text" name="clientAuthorizedPersonReply[]" required></td>
+                                <td><button type="button" class="remove-client-row-btn">Remove</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" id="addClientRowBtn">Add Row</button>
+                </div>
+    
+                <div class="form-section">
+                    <h2>Particulars</h2>
+                    <table id="fixedAttributesTable">
+                        <thead>
+                            <tr>
+                                <th>Particulars</th>
+                                <th>Inspection</th>
+                                <th>AP's Reply</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Whether all client are registered directly with the trading members only</td>
+                                <td><input type="text" name="inspection1" required></td>
+                                <td><input type="text" name="apReply1" required></td>
+                            </tr>
+                            <tr>
+                                <td>Whether AP has adequate systems, including voice recording, have been put in place, with a view to ensure recording of order placement from client?</td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>Is there any movement of Funds and securities between the client and AP for settlement of trades on the Exchange? (check Demat statement and bank account of the AP to verify such instances)</td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>Weather AP is generating and issuing documents like contract notes statement of funds, daily margin statements? (AP may provide administrative assistance in procurement of documents from the Trading Members, after maintain proper records maintain proper records of the same)</td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>whether All AP terminals are as per the information reported to the Exchange?</td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>Whether Authorized person is involved in any funds-based activities / collection deposit from investor / unauthorized trading / chit funds or any other such scheme?</td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>The AP has not dealt with any other Trading Member / AP on behalf of its clients / self on the same stock Exchange.</td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>The AP is involved in accepting deposits from the public and giving assured returns to their clients </td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>Complaints received by and against the AP's are handled appropriately and proper records are maintained </td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>Advertisements for soliciting business are not issued by the APs in newspapers / pamphlets / journals / magazines etc., without seeking appropriate approvals from the Exchange, through the Trading Member.</td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>Whether Trading activities / Turnover of APs are monitored and necessary actions / investigations are undertaken on a timely basis?</td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>Whether trading terminals of AP de-activated which are inactive for more than 6 months and update the Exchange records?
+                                    Whether Appropriate due diligence is undertaken in case of re-activation of such
+                                    terminals?
+                                    
+                                </td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td> Whether proper segregation and demarcation are maintained at AP office for any permissible activity other than the broking business?
+                                </td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td> Whether AP records / data are properly maintained with confidentiality in a secure manner including sufficient backup.
+                                </td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td> Whether proper segregation and demarcation are maintained at AP office for any permissible activity other than the broking business?
+                                </td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td> Whether operating from own or rented premises? If rented, whether rental agreement available?
+                                </td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>In case of change / shifting of location of AP, the following is ensured:<br>
+                                    a All clients mapped to the AP are notified at least thirty days before the change.<br>
+                                    b Notice Board and applicable SEBI registration certificates are immediately put up at the new location.<br>
+                                    c The new location shall be duly reported to the Exchange and the old location should be deactivated. New terminal details shall also be uploaded to the Exchange.
+                                </td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>Is the Approved User an employee of the AP? (check the appointment letter if he is an employee, else confirm what is the relation) </td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>Whether the Authorized Person is sharing brokerage with another Authorized Person or any other person Inspection Remarks
+                                </td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>Whether AP are carrying out proprietary trades through any other broker? (write details) (Member-AP Agreement)
+                                </td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>Check for status of the firm and see whether there is any change in status and constitution of the same without prior approval from the SEBI: (Regulation 6A (1) of Chapter Il of SEBI (Stock broker and sub brokers) Regulations, 1992) Inspection Remarks
+                                </td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>Whether other brokers terminals are lying in the Same premises of Authorized Persons. If yes, in whose name the other broker's terminal is  registered? (write details and check if Kotak clients are mapped to that terminal)? (Regulation 15 of Chapter III of SEBI (Stock broker and sub broker) Regulation, 1992)
+                                </td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>Sending text message / e-mail confirmation to the client, using "Kotak Securities Ltd" wordings and not using the word "authorized person" (Member-AP Agreement)
+                                </td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>Whether Authorized Persons is issuing any false / fabricated / manipulated statement of accounts to the client / issuing equity research report?
+                                </td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>Whether Walk-In register & Complaint register is properly maintained at Authorized Person office? If No, then inform the AP to maintain the same.</td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>Whether deal-slips are accepted from client and are uploaded in CRM and are uploaded in CRM on T+1 day of trade</td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                            <tr>
+                                <td>VR Backup status (Y/N) (Check for confirmation though WhatsApp / Email)</td>
+                                <td><input type="text" name="inspection2" required></td>
+                                <td><input type="text" name="apReply2" required></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+    
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    <script src="script.js"></script>
+</body>
+</html>
